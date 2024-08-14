@@ -9,12 +9,28 @@
         <pi-menu-burger-20 />
       </p-button>
       <img
-        src="https://privy-design-system.vercel.app/assets/images/logo.svg"
-        alt="persona-icon"> Persona
+        src="~/assets/images/logo-privy-wordmark.svg"
+        alt="privy-icon">
     </p-navbar-brand>
     <p-navbar-nav
       align="right"
       class="space-x-3">
+      <p-nav-item class="relative">
+        <template #icon>
+          <div style="position: relative;">
+            <p-dot color="info" style="position: absolute; top: -0.5px; right: -0.5px;"></p-dot>
+            <pi-notification-20 />
+          </div>
+        </template>
+      </p-nav-item>
+      <p-nav-item class="relative">
+        <template #icon>
+          <div style="position: relative;">
+            <p-dot color="info" style="position: absolute; top: -0.5px; right: -0.5px;"></p-dot>
+            <pi-background-process-20 />
+          </div>
+        </template>
+      </p-nav-item>
       <p-nav-item class="relative">
         <template #icon>
           <pi-question-circle-20 />
