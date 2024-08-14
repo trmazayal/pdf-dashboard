@@ -44,6 +44,9 @@
             <p-divider />
           </template>
         </p-dropdown>
+        <div>
+          <p-button color="danger"><UploadIcon />Upload Document. </p-button>
+        </div>
       </div>
     </p-sidebar-brand>
     <template #bottom>
@@ -59,6 +62,7 @@ import menus from '~/menu'
 import { templateRef, useElementSize } from '@vueuse/core'
 import { toast } from '@privyid/persona/core'
 import { type Account } from '~/api/user'
+import UploadIcon from '@privyid/persona-icon/vue/cloud-upload/20.vue'
 
 const props = defineProps({ modelValue: { type: Boolean, default: false } })
 const emit  = defineEmits(['update:modelValue'])

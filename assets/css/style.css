@@ -12,3 +12,30 @@ body {
 .site {
   @apply min-h-full;
 }
+
+.center-content {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  width: 100%;
+}
+.left-content {
+  display: flex;
+  justify-content: left;
+  align-items: left;
+  text-align: left;
+  width: 100%;
+}
+
+.table-container {
+  max-height: 850px; /* Adjust height as needed */
+  overflow: auto;
+}
+
+.pagination-bottom {
+  position: fixed;
+  bottom: 30px;
+  width: 80%;
+  background-color: white;
+}
