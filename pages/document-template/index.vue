@@ -3,12 +3,12 @@
     <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px;">
         <div style="display: flex; align-items: center; gap: 10px;">
             <p-button variant="ghost" icon>
-                <IconRefresh />
+                <pi-refresh-20 />
             </p-button>
 
             <p-input-group style="width: 300px;">
                 <p-input-group-addon>
-                    <IconSearch />
+                    <pi-search-20 />
                 </p-input-group-addon>
                 <p-input placeholder="Search"/>
             </p-input-group>
@@ -27,34 +27,92 @@
         </div>
 
         <p-button variant="outline" icon @click="openModal">
-            Create Document <IconAddPlus />
+            Create Template <pi-add-plus-20 />
         </p-button>
     </div>
 
-    <div class="p-6 table-container mt-6">
-        <p-table-static :fields="fields" :items="items">
-            <template #cell(.)="{ item }">
-                <p-text variant="body2" class="center-content">
-                    {{ item.star }}
+    <div class="document--list">
+    <p-table
+      class="datatable--custom"
+      :fields="fields"
+      :items="items"
+      variant="static">
+        <template #cell(star)="{ item }">
+            <div class="text-center item-center self-stretch m-auto"
+                @click="toggleFavorite(item)">
+                <!-- toggle favorite star -->
+                <pi-star-favorite-20 v-if="!item.isFavorite" />
+                <pi-star-favorite-solid-20 v-else />
+            </div>
+        </template>
+        <template #cell(template)="{ item }">
+            <div class="flex gap-3">
+            <div class="flex items-start gap-3">
+                <div>
+                <p-avatar
+                    size="sm">
+                    <pi-template-20 />
+                </p-avatar>
+                </div>
+                <div class="flex flex-col">
+                <p-text variant="body2">
+                    {{ item.template.name }}
                 </p-text>
-          </template>
-            <template #cell(templateName)="{ item }">
-                <p-text variant="body2" class="center-content">
-                    {{ item.templateName }}
+                </div>
+            </div>
+            </div>
+        </template>
+        <template #cell(owner)="{ item }">
+            <div class="flex gap-3">
+            <div class="flex items-start gap-3">
+                <div>
+                <p-avatar
+                    v-if="item.owner.avatar"
+                    size="sm"
+                    :src="item.owner.avatar" />
+                <p-avatar
+                    v-else
+                    size="sm">
+                    <pi-document-empty-16 />
+                </p-avatar>
+                </div>
+                <div class="flex flex-col">
+                <p-text variant="body2">
+                    {{ item.owner.name }}
                 </p-text>
-          </template>
-            <template #cell(owner)="{ item }">
-                <p-text variant="body2" class="center-content">
-                    {{ item.owner }}
-                </p-text>
-          </template>
-            <template #cell(uploadAt)="{ item }">
-                <p-text variant="body2" class="center-content">
-                    {{ item.uploadAt }}
-                </p-text>
-          </template>
-
-        </p-table-static>
+                </div>
+            </div>
+            </div>
+        </template>
+        <template #cell(uploadedAt)="{ item }">
+            <div class="flex gap-3">
+            <div class="grid grid-cols-1 gap-1">
+                <div>
+                    <p-text variant="body2">
+                        {{ item.uploadedAt.date }}
+                    </p-text>
+                </div>
+                <div>
+                    <p-text variant="body2">
+                        {{ item.uploadedAt.time }}
+                    </p-text>
+                </div>
+            </div>
+            </div>
+        </template>
+        </p-table>
+        <p-pagination
+        v-model="model"
+        v-model:per-page="perPage"
+        :per-page-options="perPageOptions"
+        :total="total"
+        navigation-only
+        show-detail
+        variant="far">
+        <template #pagination-count>
+            Page {{ model }} of {{ totalPage }}
+        </template>
+        </p-pagination>
     </div>
 </div>
 
@@ -66,7 +124,7 @@
         <div class="overflow-y-auto modal--full__header__content">
             <div class="flex items-center p-3 space-x-3">
                 <div style="position: relative;">
-                    <IconDocument />
+                    <pi-need-action-alt-20 />
                 </div>
                 <p-text class="text-subtle">Document 1</p-text>
             </div>
@@ -86,10 +144,10 @@
                             <p-text variant="overline">Tool</p-text>
                             <div class="flex flex-row ...">
                                 <p-button variant="ghost" icon>
-                                    <IconAddPlus />
+                                    <pi-add-plus-20 />
                                 </p-button>
                                 <p-button variant="ghost" icon>
-                                    <IconAddPlus />
+                                    <pi-document-check-20 />
                                 </p-button>
                             </div>
                         </div>
@@ -99,22 +157,29 @@
                             <p-text variant="overline">Insert</p-text>
                             <div class="flex flex-row ...">
                                 <p-button variant="ghost" icon>
-                                    <IconAddPlus />
+                                    <pi-text-editor-20 />
                                 </p-button>
                                 <p-button variant="ghost" icon>
-                                    <IconAddPlus />
+                                    <pi-image-20 />
                                 </p-button>
                                 <p-button variant="ghost" icon>
-                                    <IconAddPlus />
+                                    <pi-highlight-20 />
                                 </p-button>
                                 <p-button variant="ghost" icon>
-                                    <IconAddPlus />
+                                    <pi-message-20 />
                                 </p-button>
+                                <p-dropdown variant="ghost" icon no-caret>
+                                    <template #button-content>
+                                        <pi-edit-square-20 />
+                                        <pi-caret-down-20 />
+                                    </template>
+
+                                    <p-dropdown-item>Item Text</p-dropdown-item>
+                                    <p-dropdown-item>Item Text</p-dropdown-item>
+                                    <p-dropdown-item>Item Text</p-dropdown-item>
+                                </p-dropdown>
                                 <p-button variant="ghost" icon>
-                                    <IconAddPlus />
-                                </p-button>
-                                <p-button variant="ghost" icon>
-                                    <IconAddPlus />
+                                    <pi-link-20 />
                                 </p-button>
                             </div>
                         </div>
@@ -124,22 +189,22 @@
                             <p-text variant="overline">Form</p-text>
                             <div class="flex flex-row ...">
                                 <p-button variant="ghost" icon>
-                                    <IconAddPlus />
+                                    <pi-record-20 />
                                 </p-button>
                                 <p-button variant="ghost" icon>
-                                    <IconAddPlus />
+                                    <pi-persona-20 />
                                 </p-button>
                                 <p-button variant="ghost" icon>
-                                    <IconAddPlus />
+                                    <pi-persona-20 />
                                 </p-button>
                                 <p-button variant="ghost" icon>
-                                    <IconAddPlus />
+                                    <pi-persona-20 />
                                 </p-button>
                                 <p-button variant="ghost" icon>
-                                    <IconAddPlus />
+                                    <pi-persona-20 />
                                 </p-button>
                                 <p-button variant="ghost" icon>
-                                    <IconAddPlus />
+                                    <pi-persona-20 />
                                 </p-button>
                             </div>
                         </div>
@@ -149,19 +214,19 @@
                             <p-text variant="overline">Placement</p-text>
                             <div class="flex flex-row ...">
                                 <p-button variant="ghost" icon>
-                                    <IconAddPlus />
+                                    <pi-signature-20 />
                                 </p-button>
                                 <p-button variant="ghost" icon>
-                                    <IconAddPlus />
+                                    <pi-stamp-20 />
                                 </p-button>
                                 <p-button variant="ghost" icon>
-                                    <IconAddPlus />
+                                    <pi-signature-text-20 />
                                 </p-button>
                                 <p-button variant="ghost" icon>
-                                    <IconAddPlus />
+                                    <pi-e-meterai-20 />
                                 </p-button>
                                 <p-button variant="ghost" icon>
-                                    <IconAddPlus />
+                                    <pi-document-seal-20 />
                                 </p-button>
                             </div>
                         </div>
@@ -205,52 +270,7 @@
 
 <script lang="ts" setup>
 
-import IconRefresh from '@privyid/persona-icon/vue/refresh/20.vue'
-import IconSearch from '@privyid/persona-icon/vue/search/20.vue'
-import IconAddPlus from '@privyid/persona-icon/vue/add-plus/20.vue'
-import IconDocument from '@privyid/persona-icon/vue/need-action-alt/20.vue'
-
 import { defineTable } from '@privyid/persona/core'
-
-const fields = defineTable([
-{
-    key    : 'star',
-    label  : '',
-},
-{
-    key    : 'templateName',
-    label  : 'Template Name',
-},
-{
-    key  : 'owner',
-    label: 'Owner',
-},
-{
-    key      : 'uploadAt',
-    label    : 'Upload At',
-},
-])
-
-const items = ref([
-{
-    star        : true,
-    templateName: 'Template Name',
-    owner       : 'Owner',
-    uploadAt    : 'Upload At',
-},
-{
-    star        : false,
-    templateName: 'Template Name',
-    owner       : 'Owner',
-    uploadAt    : 'Upload At',
-},
-{
-    star        : false,
-    templateName: 'Template Name',
-    owner       : 'Owner',
-    uploadAt    : 'Upload At',
-},
-])
 
 const documentTemplateModal = ref(false)
 
@@ -258,5 +278,246 @@ const openModal = () => {
     documentTemplateModal.value = true
 }
 
+// Table
+
+const fields = defineTable([
+  {
+    key  : 'star',
+    label: '',
+    width: 5,
+  },
+  {
+    key  : 'template',
+    label: 'Template Name',
+    width: 40,
+  },
+  {
+    key  : 'owner',
+    label: 'Owner',
+    width: 40,
+  },
+  {
+    key  : 'uploadedAt',
+    label: 'Uploaded At',
+  },
+])
+
+const items = ref([
+  {
+    template: {
+      name  : 'Surat Pernyataan Program Akselerasi Surat Pernyataan Program Akselerasi Surat Pernyataan Program Akselerasi Surat Pernyataan Program Akselerasi Surat Pernyataan Program Akselerasi',
+      avatar: 'https://picsum.photos/50',
+    },
+    owner: {
+      name  : 'Tarjono Sujono Jati',
+      avatar: 'https://picsum.photos/50',
+    },
+    uploadedAt: {
+        date: 'Jun 02, 2023',
+        time: '12:00',
+    },
+  },
+  {
+    template: {
+      name  : 'Surat Pernyataan Program Akselerasi',
+      avatar: 'https://picsum.photos/50',
+    },
+    owner: {
+      name  : 'Xavier Sawojati',
+      avatar: 'https://picsum.photos/50',
+    },
+    uploadedAt: {
+        date: 'Jun 02, 2023',
+        time: '12:00',
+    },
+  },
+  {
+    template: {
+      name  : 'Surat Pernyataan Program Akselerasi',
+      avatar: 'https://picsum.photos/50',
+    },
+    owner: {
+      name  : 'Tarjono Sujono Jati',
+      avatar: 'https://picsum.photos/50',
+    },
+    uploadedAt: {
+        date: 'Jun 02, 2023',
+        time: '12:00',
+    },
+  },
+  {
+    template: {
+      name  : 'Surat Pernyataan Program Akselerasi',
+      avatar: 'https://picsum.photos/50',
+    },
+    owner: {
+      name  : 'Franc Meduta Wijayanto',
+      avatar: 'https://picsum.photos/50',
+    },
+    uploadedAt: {
+        date: 'Jun 02, 2023',
+        time: '12:00',
+    },
+  },
+  {
+    template: {
+      name  : 'Surat Pernyataan Program Akselerasi',
+      avatar: 'https://picsum.photos/50',
+    },
+    owner: {
+      name  : 'Franc Meduta Wijayanto',
+      avatar: 'https://picsum.photos/50',
+    },
+    uploadedAt: {
+        date: 'Jun 02, 2023',
+        time: '12:00',
+    },
+  },
+  {
+    template: {
+      name  : 'Surat Pernyataan Program Akselerasi',
+      avatar: 'https://picsum.photos/50',
+    },
+    owner: {
+      name  : 'Franc Meduta Wijayanto',
+      avatar: 'https://picsum.photos/50',
+    },
+    uploadedAt: {
+        date: 'Jun 02, 2023',
+        time: '12:00',
+    },
+  },
+  {
+    template: {
+      name  : 'Surat Pernyataan Program Akselerasi',
+      avatar: 'https://picsum.photos/50',
+    },
+    owner: {
+      name  : 'Franc Meduta Wijayanto',
+      avatar: 'https://picsum.photos/50',
+    },
+    uploadedAt: {
+        date: 'Jun 02, 2023',
+        time: '12:00',
+    },
+  },
+  {
+    template: {
+      name  : 'Surat Pernyataan Program Akselerasi',
+      avatar: 'https://picsum.photos/50',
+    },
+    owner: {
+      name  : 'Franc Meduta Wijayanto',
+      avatar: 'https://picsum.photos/50',
+    },
+    uploadedAt: {
+        date: 'Jun 02, 2023',
+        time: '12:00',
+    },
+  },
+  {
+    template: {
+      name  : 'Surat Pernyataan Program Akselerasi',
+      avatar: 'https://picsum.photos/50',
+    },
+    owner: {
+      name  : 'Franc Meduta Wijayanto',
+      avatar: 'https://picsum.photos/50',
+    },
+    uploadedAt: {
+        date: 'Jun 02, 2023',
+        time: '12:00',
+    },
+  },
+  {
+    template: {
+      name  : 'Surat Pernyataan Program Akselerasi',
+      avatar: 'https://picsum.photos/50',
+    },
+    owner: {
+      name  : 'Tarjono Sujono Jati',
+      avatar: 'https://picsum.photos/50',
+    },
+    uploadedAt: {
+        date: 'Jun 02, 2023',
+        time: '12:00',
+    },
+  },
+  {
+    template: {
+      name  : 'Surat Pernyataan Program Akselerasi',
+      avatar: 'https://picsum.photos/50',
+    },
+    owner: {
+      name  : 'Franc Meduta Wijayanto',
+      avatar: 'https://picsum.photos/50',
+    },
+    uploadedAt: {
+        date: 'Jun 02, 2023',
+        time: '12:00',
+    },
+  },
+  {
+    template: {
+      name  : 'Surat Pernyataan Program Akselerasi',
+      avatar: 'https://picsum.photos/50',
+    },
+    owner: {
+      name  : 'Tarjono Sujono Jati',
+      avatar: 'https://picsum.photos/50',
+    },
+    uploadedAt: {
+        date: 'Jun 02, 2023',
+        time: '12:00',
+    },
+  },
+  {
+    template: {
+      name  : 'Surat Pernyataan Program Akselerasi',
+      avatar: 'https://picsum.photos/50',
+    },
+    owner: {
+      name  : 'Franc Meduta Wijayanto',
+      avatar: 'https://picsum.photos/50',
+    },
+    uploadedAt: {
+        date: 'Jun 02, 2023',
+        time: '12:00',
+    },
+  },
+  {
+    template: {
+      name  : 'Surat Pernyataan Program Akselerasi',
+      avatar: 'https://picsum.photos/50',
+    },
+    owner: {
+      name  : 'Tarjono Sujono Jati',
+      avatar: 'https://picsum.photos/50',
+    },
+    uploadedAt: {
+        date: 'Jun 02, 2023',
+        time: '12:00',
+    },
+  },
+])
+
+// Pagination
+
+const model          = ref(1)
+const total          = ref(50)
+const perPage        = ref(10)
+const perPageOptions = ref([
+  5,
+  10,
+  15,
+])
+
+const totalPage = computed(() => {
+  return total.value <= 0 ? 0 : Math.ceil(total.value / perPage.value)
+})
+
+const toggleFavorite = (item) => {
+  item.isFavorite = !item.isFavorite
+}
 
 </script>
