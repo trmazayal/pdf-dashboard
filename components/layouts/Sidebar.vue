@@ -44,9 +44,15 @@
             <p-divider />
           </template>
         </p-dropdown>
-        <div>
-          <p-button color="danger"><UploadIcon />Upload Document. </p-button>
-        </div>
+        <p-button
+            v-if="canUploadDocument"
+            color="primary"
+            class="w-full"
+            data-e2eid="btn-new-upload"
+            @click="openUpload()">
+            <pi-cloud-upload-20 />
+            Upload Document
+          </p-button>
       </div>
     </p-sidebar-brand>
     <template #bottom>
@@ -55,6 +61,11 @@
       </div>
     </template>
   </p-sidebar-menu>
+
+  <ModalsUploadDoc
+    v-model="modalUpload"
+    @close="modalUpload = false" />
+    
 </template>
 
 <script lang="ts" setup>
@@ -62,7 +73,6 @@ import menus from '~/menu'
 import { templateRef, useElementSize } from '@vueuse/core'
 import { toast } from '@privyid/persona/core'
 import { type Account } from '~/api/user'
-import UploadIcon from '@privyid/persona-icon/vue/cloud-upload/20.vue'
 
 const props = defineProps({ modelValue: { type: Boolean, default: false } })
 const emit  = defineEmits(['update:modelValue'])
@@ -86,6 +96,10 @@ const brandHeight = computed(() => {
 const sidebarBottom = templateRef<HTMLDivElement>('sidebar-bottom')
 const bottom        = useElementSize(sidebarBottom)
 
+const modalUpload           = ref(false)
+const canUploadDocument = computed(() => {
+  return true
+})
 const bottomHeight = computed(() => {
   return `${bottom.height.value + 80}px`
 })
@@ -131,6 +145,11 @@ function switchAccount (account: Account): void {
     title: 'Switch Account',
     text : `You are successfully to switch on ${account.text} account`,
   })
+}
+
+
+function openUpload () {
+  modalUpload.value = true
 }
 
 </script>
