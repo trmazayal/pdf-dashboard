@@ -117,9 +117,9 @@
 import { defineTable } from '@privyid/persona/core'
 
 const documentTemplateModal = ref(false)
-const canUploadDocument = computed(() => {
-  return true
-})
+// const canUploadDocument = computed(() => {
+//   return true
+// })
 
 const openModal = () => {
     documentTemplateModal.value = true

@@ -29,11 +29,11 @@
                     <div class="p-6 rounded-t shadow-sm bg-default space-y-4">
                         <DropzoneAddDoc />
                         <div class = "grid grid-cols-2 items-center gap-4">
-                            <p-button>
+                            <p-button @click="showCreateBlankModal">
                                 Create blank
                                 <pi-add-plus-20 />
                             </p-button>
-                            <p-button>
+                            <p-button @click="showFromTemplateModal">
                                 From template
                                 <pi-add-document-20 />
                             </p-button>
@@ -46,6 +46,23 @@
                     </div>
                 </div>
             </div>
+            <ModalsFromTemplate v-model="createTemplateModal" />
+            <ModalsCreateTemplate v-model="createBlankModal" />
         </template>
     </p-modal>
 </template>
+
+<script lang="ts" setup>
+import { ref } from 'vue'
+
+const createBlankModal = ref(false)
+const createTemplateModal = ref(false)
+
+const showCreateBlankModal = () => {
+    createBlankModal.value = true
+}
+const showFromTemplateModal = () => {
+    createTemplateModal.value = true
+}
+
+</script>
