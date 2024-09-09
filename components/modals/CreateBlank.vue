@@ -16,7 +16,12 @@
       <div class="modal--full__header">
         <div class="flex items-center p-3 space-x-3">
           <p-button color="danger">
-            Save template
+            Continue
+          </p-button>
+          <p-button
+            variant="solid"
+            icon>
+            <pi-download-20 />
           </p-button>
         </div>
       </div>
